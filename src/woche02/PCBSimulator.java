@@ -4,16 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Ein Simulator, der ProcessControlBlocks (PCBs) statt einfacher Prozesse verwendet.
+ * Ein Simulator, der ProcessControlBlocks (PCBs) verwendet.
+ * Vervollständige die Methoden gemäß der Aufgabenstellung!
  */
 public class PCBSimulator {
-    
-    // Map mit allen Prozessen im System
     private Map<Integer, ProcessControlBlock> pcbs = new HashMap<>();
     private int nextId = 1;
 
     /**
-     * Erstellt einen neuen Prozess (als PCB) und setzt seinen Zustand auf RUNNING.
+     * Erstellt einen neuen Prozess (als PCB) und fügt ihn der Map hinzu.
      * @param name Name des Prozesses.
      * @return Die PID des neuen Prozesses.
      */
@@ -31,13 +30,24 @@ public class PCBSimulator {
      * @param pid Die PID des Prozesses.
      */
     public void blockProcess(int pid) {
-        ProcessControlBlock pcb = pcbs.get(pid);
-        if (pcb == null) {
-            System.err.println("Error: Process " + pid + " not found!");
-            return;
-        }
-        pcb.setState(ProcessState.BLOCKED);
-        System.out.println("Blocked PCB: " + pcb);
+        // TODO: Implementiere diese Methode!
+        // 1. Hole den PCB aus der Map (mit pcbs.get(pid)).
+        // 2. Prüfe, ob der Prozess existiert (sonst: IllegalArgumentException).
+        // 3. Setze den Zustand auf BLOCKED (nur wenn aktuell RUNNING!).
+        // 4. Gib eine Bestätigungsmeldung aus (z. B. "Blocked PCB: ...").
+    }
+
+    /**
+     * Beendet einen Prozess (Zustand: RUNNING/BLOCKED → TERMINATED).
+     * @param pid Die PID des Prozesses.
+     * @throws IllegalArgumentException Falls der Prozess nicht existiert.
+     */
+    public void terminateProcess(int pid) {
+        // TODO: Implementiere diese Methode!
+        // 1. Hole den PCB aus der Map.
+        // 2. Prüfe, ob der Prozess existiert (sonst: Exception).
+        // 3. Setze den Zustand auf TERMINATED (unabhängig vom aktuellen Zustand!).
+        // 4. Gib eine Bestätigungsmeldung aus.
     }
 
     /**
@@ -46,13 +56,7 @@ public class PCBSimulator {
      * @param priority Die neue Priorität (1 = niedrig, 10 = hoch).
      */
     public void setPriority(int pid, int priority) {
-        ProcessControlBlock pcb = pcbs.get(pid);
-        if (pcb == null) {
-            System.err.println("Error: Process " + pid + " not found!");
-            return;
-        }
-        pcb.setPriority(priority);
-        System.out.println("Updated priority of PCB " + pid + " to " + priority);
+        // TODO: Implementiere diese Methode
     }
 
     /**
@@ -61,17 +65,14 @@ public class PCBSimulator {
      * @return Der PCB oder null, wenn der Prozess nicht existiert.
      */
     public ProcessControlBlock getPCB(int pid) {
-        return pcbs.get(pid);
+        // TODO: Implementiere diese Methode
+        return null; // Platzhalter
     }
 
     /**
      * Gibt alle PCBs aus (für Debugging).
      */
     public void listPCBs() {
-        System.out.println("--- PCB List ---");
-        for (ProcessControlBlock pcb : pcbs.values()) {
-            System.out.println(pcb);
-        }
-        System.out.println("----------------");
+        // TODO: Implementiere diese Methode
     }
 }

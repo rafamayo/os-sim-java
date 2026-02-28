@@ -1,65 +1,34 @@
 package woche02;
 
-
 /**
- * Process Control Block (PCB) - Erweiterung der Process-Klasse.
- * Enthält zusätzliche Metadaten wie Priorität, Elternprozess und Register.
+ * Process Control Block (PCB) - Vervollständige diese Klasse!
+ * Implementiere die fehlenden Methoden und Felder gemäß der Aufgabenstellung.
  */
 public class ProcessControlBlock {
+    // Das ProcessState-Enum steht in seiner eigenen Datei zur Verfügung!
 
-    private int pid;
-    private String name;
-    private ProcessState state; // Zustand
-    private int priority;       // Priorität für Scheduling
-    private int parentPid;      // Elternprozess-ID (-1 = kein Elternprozess)
-    private String[] registers; // Simulierte CPU-Register
+    // TODO: Deklariere die folgenden Felder (gemäß Aufgabenstellung)
+    // private int pid;
+    // private String name;
+    // private ProcessState state;
+    // private int priority;
+    // private int parentPid;
+    // private String[] registers;
 
     public ProcessControlBlock(int pid, String name) {
-        this.pid = pid;
-        this.name = name;
-        this.state = ProcessState.NEW;
-        this.priority = 1;      // Default-Priorität
-        this.parentPid = -1;    // Kein Elternprozess
-        this.registers = new String[16]; // 16 Register (wie in echten CPUs)
+        // TODO: Initialisiere alle Felder im Konstruktor
+        // this.pid = pid;
+        // this.name = name;
+        // this.state = ProcessState.NEW;
+        // this.priority = 1;
+        // this.parentPid = -1;
+        // this.registers = new String[16];
     }
 
-    // Getter/Setter für alle Felder
-    public int getPid() {
-        return pid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public ProcessState getState() {
-        return state;
-    }
-
-    public void setState(ProcessState state) {
-        this.state = state;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public int getParentPid() {
-        return parentPid;
-    }
-
-    public void setParentPid(int parentPid) {
-        this.parentPid = parentPid;
-    }
-
-    public String[] getRegisters() {
-        return registers;
-    }
-
+    // TODO: Füge Getter/Setter für alle Felder hinzu
+    // public int getPid() { return pid; }
+    // public void setState(ProcessState state) { this.state = state; }
+    // ...
     public void setRegister(int index, String value) {
         if (index >= 0 && index < registers.length) {
             registers[index] = value;
@@ -68,9 +37,8 @@ public class ProcessControlBlock {
 
     @Override
     public String toString() {
-        return String.format(
-            "PCB{pid=%d, name='%s', state=%s, priority=%d, parentPid=%d, registers=%s}",
-            pid, name, state, priority, parentPid, java.util.Arrays.toString(registers)
-        );
+        // TODO: Implementiere eine toString()-Methode, die alle Felder ausgibt
+        return "ProcessControlBlock{...}";
     }
 }
+

@@ -87,13 +87,12 @@ git clone https://github.com/rafamayo/os-sim-java
 ---
 
 ## 📂 Dateien in diesem Verzeichnis
+<br>
 
-```
-src/
-└── woche01/
-    ├── HelloSimulator.java    # Hauptprogramm mit `main`-Methode
-    └── SimulatorSkeleton.java # Skeleton-Klasse für den Simulator
-```
+| Datei | Beschreibung |
+|-------|-------------|
+| `HelloSimulator.java` | Hauptprogramm mit `main`-Methode. |
+| `SimulatorSkeleton.java` | Skeleton-Klasse für den Simulator. |
 
 ---
 

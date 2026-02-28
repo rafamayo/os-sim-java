@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Verwaltet Prozesszustände mit einer Map und einem enum.
+ * Vervollständige die Methoden gemäß der Aufgabenstellung!
  */
 public class ProcessManager {
 
@@ -20,13 +21,9 @@ public class ProcessManager {
             this.state = ProcessState.NEW;
         }
 
-        public void setState(ProcessState state) {
-            this.state = state;
-        }
-
-        public ProcessState getState() {
-            return state;
-        }
+        // TODO: Füge Getter/Setter für 'state' hinzu
+        // public void setState(ProcessState state) { ... }
+        // public ProcessState getState() { ... }
 
         @Override
         public String toString() {
@@ -35,7 +32,6 @@ public class ProcessManager {
     }
 
     private int nextId = 1;
-    // Map zur Verwaltung der vorhandenen Prozesse
     private Map<Integer, Process> processes = new HashMap<>();
 
     /**
@@ -57,13 +53,9 @@ public class ProcessManager {
      * @param pid Die PID des Prozesses.
      */
     public void blockProcess(int pid) {
-        Process process = processes.get(pid);
-        if (process == null) {
-            System.err.println("Error: Process " + pid + " not found!");
-            return;
-        }
-        process.setState(ProcessState.BLOCKED);
-        System.out.println("Blocked " + process);
+        // TODO: Implementiere diese Methode
+        // 1. Hole den Prozess aus der Map
+        // 2. Setze den Zustand auf BLOCKED (falls Prozess existiert)
     }
 
     /**
@@ -71,13 +63,7 @@ public class ProcessManager {
      * @param pid Die PID des Prozesses.
      */
     public void terminateProcess(int pid) {
-        Process process = processes.get(pid);
-        if (process == null) {
-            System.err.println("Error: Process " + pid + " not found!");
-            return;
-        }
-        process.setState(ProcessState.TERMINATED);
-        System.out.println("Terminated " + process);
+        // TODO: Implementiere diese Methode
     }
 
     /**
@@ -86,18 +72,14 @@ public class ProcessManager {
      * @return Der Zustand des Prozesses oder null, wenn der Prozess nicht existiert.
      */
     public ProcessState getProcessState(int pid) {
-        Process process = processes.get(pid);
-        return process != null ? process.getState() : null;
+        // TODO: Implementiere diese Methode
+        return null; // Platzhalter
     }
 
     /**
      * Gibt alle Prozesse aus (für Debugging).
      */
     public void listProcesses() {
-        System.out.println("--- Process List ---");
-        for (Process process : processes.values()) {
-            System.out.println(process);
-        }
-        System.out.println("---------------------");
+        // TODO: Implementiere diese Methode
     }
-} 
+}
