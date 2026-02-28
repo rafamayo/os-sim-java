@@ -1,5 +1,5 @@
 # Ignoriere das Verzeichnis für den Austausch mit mir
-Kursentwicklung/
+instructor/
 
 # Ignoriere Eclipse-spezifische Dateien
 .classpath
