@@ -1,0 +1,35 @@
+# Ignoriere das Verzeichnis für den Austausch mit mir
+Kursentwicklung/
+
+# Ignoriere Eclipse-spezifische Dateien
+.classpath
+.project
+.settings/
+bin/
+target/
+
+# Ignoriere Maven-spezifische Dateien (außer pom.xml)
+**/target/
+**/.classpath
+**/.project
+**/.settings/
+**/bin/
+
+# Ignoriere IDE-spezifische Dateien
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignoriere Build-Tools
+*.jar
+*.war
+*.ear
+*.class
+*.log
+*.tmp
+
+# Ignoriere Systemdateien
+.DS_Store
+Thumbs.db
+
