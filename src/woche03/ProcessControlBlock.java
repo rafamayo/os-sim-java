@@ -17,10 +17,10 @@ public class ProcessControlBlock {
     // Ab Woche 3 erforderlich
     private int arrivalTime;    // Neu: Ankunftszeit (für Scheduling)
     private int burstTime;      // Neu: Gesamt-Burst-Time (für SJF/SRT)
-    private int remainingTime;  // Verbleibende Zeit (für präemptive Algorithmen)
-    private int startTime;      // -1 = noch nicht gestartet
-    private int finishTime;     // -1 = noch nicht beendet
-    private int usedTime;       // Zeit, die im letzten Quantum verbraucht wurde
+    // TODO: Zeiten ergänzen!
+    // --->
+
+    
 
     /**
      * Konstruktor mit allen benötigten Parametern für Scheduling. Ab Woche 3

@@ -10,8 +10,8 @@ public class Main {
     public static void main(String[] args) {
         // Workload 1: Convoy-Effekt (FCFS leidet)
         List<ProcessControlBlock> workload1 = List.of(
-            new ProcessControlBlock(1, "P1", 0, 10),  // PID, Name, Ankunftszeit, Burst-Time
-            new ProcessControlBlock(2, "P2", 1, 2),
+            new ProcessControlBlock(1, "P1", 0, 30),  // PID, Name, Ankunftszeit, Burst-Time
+            new ProcessControlBlock(2, "P2", 1, 3),
             new ProcessControlBlock(3, "P3", 2, 1)
         );
         System.out.println("Workload 1: Prozesse vor der Simulation");
@@ -21,9 +21,9 @@ public class Main {
         List<ProcessControlBlock> workload2 = List.of(
             new ProcessControlBlock(1, "P1", 0, 2),
             new ProcessControlBlock(2, "P2", 0, 2),
-            new ProcessControlBlock(3, "P3", 0, 2),
-            new ProcessControlBlock(4, "P4", 0, 2),
-            new ProcessControlBlock(5, "P5", 0, 2)
+            new ProcessControlBlock(3, "P3", 3, 2),
+            new ProcessControlBlock(4, "P4", 4, 2),
+            new ProcessControlBlock(5, "P5", 5, 2)
         );
         System.out.println("Workload 2: Prozesse vor der Simulation");
         workload2.forEach(pcb -> System.out.println(pcb));
@@ -32,7 +32,7 @@ public class Main {
         // Workload 3: Gemischt
         List<ProcessControlBlock> workload3 = List.of(
             new ProcessControlBlock(1, "P1", 0, 5),
-            new ProcessControlBlock(2, "P2", 1, 3),
+            new ProcessControlBlock(2, "P2", 1, 10),
             new ProcessControlBlock(3, "P3", 2, 1),
             new ProcessControlBlock(4, "P4", 3, 4)
         );
@@ -42,28 +42,25 @@ public class Main {
 
 
         // Teste die Scheduler
-    /*    testScheduler(new FCFSScheduler(), deepCopyWorkload(workload1), "FCFS mit Workload 1");
-        System.out.println("Workload1 nach dem Ausführen von FCFS:");
-        workload1.forEach(pcb -> System.out.println(pcb));
-
+        testScheduler(new FCFSScheduler(), deepCopyWorkload(workload1), "FCFS mit Workload 1");
+    
         testScheduler(new SJFScheduler(), deepCopyWorkload(workload1), "SJF mit Workload 1");
         workload1.forEach(pcb -> System.out.println(pcb));
 
         testScheduler(new RoundRobinScheduler(2), deepCopyWorkload(workload1), "Round-Robin (q=2) mit Workload 1");
         workload1.forEach(pcb -> System.out.println(pcb));
-*/
+
         // Teste präemptiven SRT-Scheduler (separate Methode)
         testSRTScheduler(deepCopyWorkload(workload1), "SRT mit Workload 1");
+
+        // Setzen Sie die anderen Workloads ein!
+        // Erstellen Sie weitere Workloads!
     }
 
-    // DeepCopy: kopiere alle Elemente der Liste (keine Referenzen!)
-    private static List<ProcessControlBlock> deepCopyWorkload(List<ProcessControlBlock> original) {
-    return original.stream()
-        .map(ProcessControlBlock::clone)  // Klone jedes PCB-Objekt
-        .collect(Collectors.toList());
-    }
+    
 
     // Teste die Scheduler FCFS, SJF, RR
+    // Die Zeit wird immer um usedTime() erhöht. usedTime ist entweder die vollständige burstTime (FCFS, SJF) oder en Quantum bzw. remainingTime
     private static void testScheduler(Scheduler scheduler, List<ProcessControlBlock> workload, String description) {
         System.out.println("\n=== " + description + " ===");
         int currentTime = 0;
@@ -96,6 +93,7 @@ public class Main {
 
 
     // Teste den SRTScheduler
+    // SRT ist präemptiv: die Zeit muss immer in Scheiben von Dauer 1 aktualisiert werden
     private static void testSRTScheduler(List<ProcessControlBlock> workload, String description) {
         System.out.println("\n=== " + description + " ===");
         int currentTime = 0;
@@ -131,4 +129,10 @@ public class Main {
         System.out.println("Metriken:\n" + metrics);
     }
 
+    // DeepCopy: kopiere alle Elemente der Liste (keine Referenzen!)
+    private static List<ProcessControlBlock> deepCopyWorkload(List<ProcessControlBlock> original) {
+    return original.stream()
+        .map(ProcessControlBlock::clone)  // Klone jedes PCB-Objekt
+        .collect(Collectors.toList());
+    }
 }

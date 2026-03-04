@@ -19,8 +19,10 @@ public class SJFScheduler implements Scheduler {
         }
 
         // 2. Sortiere nach Burst-Time (SJF: kürzeste Job zuerst)
-        filteredQueue.sort(Comparator.comparingInt(ProcessControlBlock::getBurstTime));
-        ProcessControlBlock selected = filteredQueue.get(0);
+        // TODO: Sortiere nach remainingTime. Vergleiche mit FCFS
+        // --->
+
+        
 
         // 3. Setze Zustand auf RUNNING
         selected.setState(ProcessState.RUNNING);

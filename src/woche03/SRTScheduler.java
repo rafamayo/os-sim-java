@@ -33,7 +33,10 @@ public class SRTScheduler implements Scheduler {
 
         // Setze den Zustand auf RUNNING (falls nicht bereits gesetzt).
         // Dies ist besonders wichtig bei Präemption: Ein unterbrochener Prozess wird wieder auf RUNNING gesetzt.
-        selected.setState(ProcessState.RUNNING);
+        // TODO: Setze den richtigen Zustand für den ausgewählten Prozess
+        // --->
+
+
 
         // --- 4. Setze die Startzeit, falls der Prozess zum ersten Mal läuft ---
         if (selected.getStartTime() == -1) {
@@ -42,9 +45,12 @@ public class SRTScheduler implements Scheduler {
 
         // --- 5. Simuliere die Ausführung für 1 Zeiteinheit ---
         // SRT ist präemptiv: Jeder Prozess läuft maximal 1 Zeiteinheit, bevor neu entschieden wird.
-        selected.setUsedTime(1);                          // Verbrauchte Zeit in diesem Quantum
-        selected.setRemainingTime(selected.getRemainingTime() - 1);  // Reduziere die verbleibende Zeit
+        // TODO: Aktualisiere usedTime nach jedem Quantum.
+        // TODO: Aktualisiere remainingTime nach jedem Quantum.
+        // --->
 
+
+        
         // --- 6. Falls der Prozess fertig ist, markiere ihn als TERMINATED ---
         if (selected.getRemainingTime() == 0) {
             selected.setState(ProcessState.TERMINATED);

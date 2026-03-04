@@ -2,8 +2,8 @@
 
 **Lernziele:**
 
-1. **Wiederverwendung** der `ProcessControlBlock`-Klasse aus Woche 02.
-2. Implementierung von **FCFS, SJF, Round-Robin** mit **realistischen PCB-Zustandsübergängen**.
+1. **Wiederverwendung** und **Ergänzung** der `ProcessControlBlock`-Klasse aus Woche 02.
+2. Implementierung/Anpassung von **FCFS, SJF, Round-Robin** mit **realistischen PCB-Zustandsübergängen**.
 3. Messung von **Waiting Time, Turnaround Time, Response Time** unter Verwendung der PCB-Metadaten.
 4. Vergleich der Algorithmen anhand von **Gantt-Diagrammen** und Metriken.
 
@@ -48,9 +48,9 @@ ProcessControlBlock nextProcess = scheduler.schedule(readyQueue, currentTime);
 
 ### **Aufgabe 1: `ProcessState` erweitern und `ProcessControlBlock` anpassen**
 
-**Ziel:** Füge den Zustand `READY` hinzu und passe `ProcessControlBlock` für Scheduling an.
+**Ziel:** Fügen Sie den Zustand `READY` hinzu und passen Sie `ProcessControlBlock` für Scheduling an.
 
-1. Kopiere die Dateien `ProcessState.java` und `ProcessControlBlock.java` vom Verzeichnis `woche02` ins Verzeichnis `woche03`. **Achtung!** `package woche03` ist nun erforderlich!
+1. Die Dateien `ProcessState.java` und `ProcessControlBlock.java` in `woche03` sind nicht vollständig und müssen ergänzt werden!
 
 2. **Erweitere `ProcessState`** in `ProcessState.java`:
    ```java
@@ -61,24 +61,31 @@ ProcessControlBlock nextProcess = scheduler.schedule(readyQueue, currentTime);
    }
    ```
 
-3. **Passe `ProcessControlBlock` an** (füge `remainingTime` und `startTime` hinzu):
+3. **Passe `ProcessControlBlock` an**: füge `remainingTime`, `startTime`, `finishTime` sowie `usedTime` hinzu.
 
 ```java
-// In ProcessControlBlock.java (woche02/)
-private int remainingTime;  // Für präemptive Algorithmen (z. B. Round-Robin)
-private int startTime;      // Wird vom Scheduler gesetzt
-private int finishTime;     // Wird vom Scheduler gesetzt
+// In ProcessControlBlock.java (woche03/)
+private int remainingTime;  // Verbleibende Zeit (für präemptive Algorithmen)
+private int startTime;      // -1 = noch nicht gestartet, vom Scheduler gesetzt
+private int finishTime;     // -1 = noch nicht beendet, vom Scheduler gesetzt
+private int usedTime;       // Zeit, die im letzten Quantum verbraucht wurde
 
-public ProcessControlBlock(int pid, String name) {
+public ProcessControlBlock(int pid, String name, int arrivalTime, int burstTime) {
     this.pid = pid;
     this.name = name;
-    this.state = ProcessState.NEW;
+    this.arrivalTime = arrivalTime;
+    this.burstTime = burstTime;
     this.remainingTime = burstTime;  // Initial gleich burstTime
-    this.startTime = -1;             // -1 = noch nicht gestartet
-    this.finishTime = -1;            // -1 = noch nicht fertig
+    this.state = ProcessState.NEW;
+    this.priority = 0;
+    this.parentPid = -1;
+    this.registers = new String[16];
+    this.startTime = -1;
+    this.finishTime = -1;
+    this.usedTime = 0;
 }
 
-// TODO: Füge Getter/Setter für remainingTime, startTime, finishTime hinzu
+// Ist der Konstruktor vollständig?
 ```
 
 ---
@@ -87,13 +94,12 @@ public ProcessControlBlock(int pid, String name) {
 
 **Ziel:** Implementiere das `Scheduler`-Interface und den **FCFS-Algorithmus** mit PCB-Zustandsübergängen.
 
-1. **Vervollständige `Scheduler.java`** (Interface):
+1. **Implementiere `Scheduler.java`** (Interface):
 
 ```java
 package woche03;
 
 import java.util.List;
-import woche02.ProcessControlBlock;  // Wiederverwendung aus Woche 02!
 
 public interface Scheduler {
     /**
@@ -105,6 +111,7 @@ public interface Scheduler {
     ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int currentTime);
 }
 ```
+**💡 Hinweis:** Das Interface steht bereits vollstendig zur Verfügung.
 
 2. **Implementiere `FCFSScheduler.java`**:
 
@@ -115,22 +122,34 @@ public interface Scheduler {
 ```java
 @Override
 public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int currentTime) {
-    if (readyQueue.isEmpty()) {
-        return null;
+    // 1. Filtere nur nicht-terminierte Prozesse mit remainingTime > 0
+    List<ProcessControlBlock> filteredQueue = readyQueue.stream()
+        .filter(pcb -> pcb.getState() != ProcessState.TERMINATED)
+        .filter(pcb -> pcb.getRemainingTime() > 0)
+        .collect(Collectors.toList());
+
+    if (filteredQueue.isEmpty()) {
+        return null;  // Keine bereiten Prozesse verfügbar
     }
 
-    // TODO: Sortiere nach arrivalTime
-    readyQueue.sort(Comparator.comparingInt(pcb -> pcb.getArrivalTime()));
+    // 2. Sortiere nach Ankunftszeit (FCFS)
+    filteredQueue.sort(Comparator.comparingInt(ProcessControlBlock::getArrivalTime));
+    ProcessControlBlock selected = filteredQueue.get(0);
 
-    ProcessControlBlock selected = readyQueue.get(0);
-    selected.setState(ProcessState.RUNNING);  // Zustand aktualisieren!
+    // 3. Setze Zustand auf RUNNING
+    selected.setState(ProcessState.RUNNING);
 
-    // TODO: Setze startTime (falls noch nicht gesetzt) und finishTime
+    // 4. Setze startTime, falls noch nicht gesetzt
     if (selected.getStartTime() == -1) {
         selected.setStartTime(currentTime);
     }
-    selected.setFinishTime(currentTime + selected.getRemainingTime());
+
+    // 5. FCFS: Prozess läuft bis zum Ende (usedTime = burstTime)
+    int usedTime = selected.getBurstTime();
+    selected.setUsedTime(usedTime);
     selected.setRemainingTime(0);  // Prozess ist fertig
+    selected.setState(ProcessState.TERMINATED);
+    selected.setFinishTime(currentTime + usedTime);
 
     return selected;
 }
@@ -148,6 +167,45 @@ public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int cu
        - Wähle den PCB mit der **kürzesten `burstTime`** (Annahme: Burst-Time ist bekannt).
        - Setze den Zustand auf `RUNNING`.
 
+```java
+@Override
+public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int currentTime) {
+    // 1. Filtere nur nicht-terminierte Prozesse mit remainingTime > 0
+    List<ProcessControlBlock> filteredQueue = readyQueue.stream()
+        .filter(pcb -> pcb.getState() != ProcessState.TERMINATED)
+        .filter(pcb -> pcb.getRemainingTime() > 0)
+        .filter(pcb -> pcb.getArrivalTime() <= currentTime)  // Nur angekommene Prozesse
+        .collect(Collectors.toList());
+
+    if (filteredQueue.isEmpty()) {
+        return null;  // Keine bereiten Prozesse verfügbar
+    }
+
+    // 2. Sortiere nach Burst-Time (SJF: kürzeste Job zuerst)
+    // TODO: Sortiere nach remainingTime! Vergleiche mit FCFS
+    // --->
+
+
+
+    // 3. Setze Zustand auf RUNNING
+    selected.setState(ProcessState.RUNNING);
+
+    // 4. Setze startTime, falls noch nicht gesetzt
+    if (selected.getStartTime() == -1) {
+        selected.setStartTime(currentTime);
+    }
+
+    // 5. SJF: Prozess läuft bis zum Ende (usedTime = burstTime)
+    int usedTime = selected.getBurstTime();
+    selected.setUsedTime(usedTime);
+    selected.setRemainingTime(0);  // Prozess ist fertig
+    selected.setState(ProcessState.TERMINATED);
+    selected.setFinishTime(currentTime + usedTime);
+
+    return selected;
+}
+```
+
 2. **SRTScheduler.java** (präemptiv):
        - Wähle den PCB mit der **kürzesten `remainingTime`**.
        - **Aktualisiere `remainingTime`** nach jedem Quantum.
@@ -156,19 +214,53 @@ public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int cu
 ```java
 @Override
 public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int currentTime) {
-    if (readyQueue.isEmpty()) {
-        return null;
+    // --- 1. Filtere alle bereiten Prozesse ---
+    // Berücksichtige nur Prozesse, die:
+    // - bereits angekommen sind (arrivalTime <= currentTime),
+    // - nicht terminiert sind (state != TERMINATED),
+    // - noch Ausführungszeit benötigen (remainingTime > 0).
+    Optional<ProcessControlBlock> shortestOpt = readyQueue.stream()
+        .filter(pcb -> pcb.getArrivalTime() <= currentTime)      // Nur angekommene Prozesse
+        .filter(pcb -> pcb.getState() != ProcessState.TERMINATED) // Ignoriere terminierte Prozesse
+        .filter(pcb -> pcb.getRemainingTime() > 0)               // Nur Prozesse mit verbleibender Zeit
+        .min((a, b) -> Integer.compare(a.getRemainingTime(), b.getRemainingTime()));  // Wähle den mit kürzester remainingTime
+
+    // --- 2. Falls keine bereiten Prozesse vorhanden sind ---
+    if (shortestOpt.isEmpty()) {
+        return null;  // Kein Prozess verfügbar (Leerlauf)
     }
 
-    // TODO: Sortiere nach remainingTime
-    readyQueue.sort(Comparator.comparingInt(ProcessControlBlock::getRemainingTime));
+    // --- 3. Wähle den Prozess mit der kürzesten remainingTime ---
+    ProcessControlBlock selected = shortestOpt.get();
 
-    ProcessControlBlock selected = readyQueue.get(0);
-    selected.setState(ProcessState.RUNNING);
+    // Setze den Zustand auf RUNNING (falls nicht bereits gesetzt).
+    // Dies ist besonders wichtig bei Präemption: Ein unterbrochener Prozess wird wieder auf RUNNING gesetzt.
+    // TODO: Setze den richtigen Zustand für den ausgewählten Prozess
+    // --->
 
-    // TODO: Aktualisiere remainingTime (falls präemptiv)
-    // ...
 
+    
+    // --- 4. Setze die Startzeit, falls der Prozess zum ersten Mal läuft ---
+    if (selected.getStartTime() == -1) {
+        selected.setStartTime(currentTime);  // Erste Ausführung: Merke die Startzeit
+    }
+
+    // --- 5. Simuliere die Ausführung für 1 Zeiteinheit ---
+    // SRT ist präemptiv: Jeder Prozess läuft maximal 1 Zeiteinheit, bevor neu entschieden wird.
+    // TODO: Aktualisiere usedTime nach jedem Quantum.
+    // TODO: Aktualisiere remainingTime nach jedem Quantum.
+    // --->
+
+
+
+    // --- 6. Falls der Prozess fertig ist, markiere ihn als TERMINATED ---
+    if (selected.getRemainingTime() == 0) {
+        selected.setState(ProcessState.TERMINATED);
+        selected.setFinishTime(currentTime + 1);  // Fertigstellungszeit = currentTime + 1 (da 1 Zeiteinheit ausgeführt wird)
+    }
+
+    // --- 7. Gib den ausgewählten Prozess zurück ---
+    // Der Rückgabewert wird in testSRTScheduler verwendet, um den aktuellen Prozess zu aktualisieren.
     return selected;
 }
 ```
@@ -177,9 +269,9 @@ public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int cu
 
 ### **Aufgabe 4: Round-Robin mit PCB-Zuständen und Quantum**
 
-**Ziel:** Implementiere Round-Robin mit **Zustandsübergängen** (`RUNNING` ↔ `READY`).
+**Ziel:** Verstehen wie *preemption* implementiert wird..
 
-1. **Vervollständige `RoundRobinScheduler.java`**:
+1. **Analysieren** Sie den Code der Methode `schedule()`. Im Abschnitt 2 wird *preemption* implementiert
     - Nutze eine **Queue** für die Ready-Queue.
     - **Präemptive Logik**:
         - Führe einen PCB für **max. `quantum` Zeiteinheiten** aus.
@@ -187,43 +279,21 @@ public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int cu
         - Falls `remainingTime = 0`, setze den Zustand auf **`TERMINATED`**.
 
 ```java
-private Queue<ProcessControlBlock> readyQueue = new LinkedList<>();
-private final int quantum;
-
-@Override
-public ProcessControlBlock schedule(List<ProcessControlBlock> readyQueue, int currentTime) {
-    if (readyQueue.isEmpty()) {
-        return null;
-    }
-
-    // TODO: Füge alle PCBs mit remainingTime > 0 zur Queue hinzu
-    this.readyQueue.addAll(readyQueue.stream()
-        .filter(pcb -> pcb.getRemainingTime() > 0)
-        .toList());
-
-    if (this.readyQueue.isEmpty()) {
-        return null;
-    }
-
-    ProcessControlBlock selected = this.readyQueue.poll();
-    selected.setState(ProcessState.RUNNING);
-
-    // TODO: Reduziere remainingTime um quantum (aber nicht unter 0)
-    int timeUsed = Math.min(quantum, selected.getRemainingTime());
-    selected.setRemainingTime(selected.getRemainingTime() - timeUsed);
-
-    // TODO: Falls remainingTime > 0, setze Zustand auf READY und füge zur Queue hinzu
-    if (selected.getRemainingTime() > 0) {
-        selected.setState(ProcessState.READY);
-        this.readyQueue.add(selected);
-    } else {
-        selected.setState(ProcessState.TERMINATED);
-        selected.setFinishTime(currentTime + timeUsed);
-    }
-
-    return selected;
+// 2. Füge neu angekommene Prozesse VOR den zuletzt ausgeführten Prozess ein
+if (lastExecutedProcess != null) {
+    // Entferne den zuletzt ausgeführten Prozess temporär
+    readyQueue.remove(lastExecutedProcess);
+    // Füge alle neu angekommenen Prozesse hinzu
+    readyQueue.addAll(newProcesses);
+    // Füge den zuletzt ausgeführten Prozess hinten wieder ein
+    readyQueue.add(lastExecutedProcess);
+} else {
+    // Falls kein letzter Prozess, einfach alle neu angekommenen Prozesse anfügen
+    readyQueue.addAll(newProcesses);
 }
 ```
+2. **Frage:** Was wurde passieren, wenn der zuletzt ausgeführte Prozess nicht aus der `readyQueue` entfernt wird? Was wäre der Unterschied?
+
 
 ---
 
@@ -260,15 +330,23 @@ public static Map<String, Double> calculateMetrics(List<ProcessControlBlock> pcb
 
 ---
 
-### **Aufgabe 6: Experimentdesign und Vergleich**
+### **Aufgabe 6: Experimentdesign und Vergleich anhand von Metriken**
 
-1. **Teste die Algorithmen** mit den folgenden Workloads (in `Main.java`):
+1. In `SchedulerUtils.java` steht die Methode `calculateMetrics` zur Verfügung, die die Werte
+    - `avgWaitingTime`,
+    - `avgTurnaroundTime`,
+    - `avgResponseTime`,
+    - `throughput`
+
+berechnet. Auf Basis dieser Werte werden wir die Scheduling-Strategien vergleichen. Wären andere Metriken interessant? Können Sie die Methode ergänzen?
+
+2. **Teste die Algorithmen** mit den folgenden Workloads (in `Main.java`):
 
 ```java
 // Workload 1: Convoy-Effekt (FCFS leidet)
 List<ProcessControlBlock> workload1 = List.of(
-    new ProcessControlBlock(1, "P1", 0, 10),  // Langer Job
-    new ProcessControlBlock(2, "P2", 1, 1),   // Kurzer Job
+    new ProcessControlBlock(1, "P1", 0, 30),  // Langer Job
+    new ProcessControlBlock(2, "P2", 1, 3),   // Kurzer Job
     new ProcessControlBlock(3, "P3", 2, 1)    // Kurzer Job
 );
 
@@ -276,26 +354,36 @@ List<ProcessControlBlock> workload1 = List.of(
 List<ProcessControlBlock> workload2 = List.of(
     new ProcessControlBlock(1, "P1", 0, 2),
     new ProcessControlBlock(2, "P2", 0, 2),
-    new ProcessControlBlock(3, "P3", 0, 2),
-    new ProcessControlBlock(4, "P4", 0, 2),
-    new ProcessControlBlock(5, "P5", 0, 2)
+    new ProcessControlBlock(3, "P3", 3, 2),
+    new ProcessControlBlock(4, "P4", 4, 2),
+    new ProcessControlBlock(5, "P5", 5, 2)
 );
 
 // Workload 3: Gemischt
 List<ProcessControlBlock> workload3 = List.of(
     new ProcessControlBlock(1, "P1", 0, 5),
-    new ProcessControlBlock(2, "P2", 1, 3),
+    new ProcessControlBlock(2, "P2", 1, 10),
     new ProcessControlBlock(3, "P3", 2, 1),
     new ProcessControlBlock(4, "P4", 3, 4)
 );
 ```
+**💡 Hinweis:** Sie können natürlich Ihre eigenen Workloads testen!
 
-2. **Vergleiche die Metriken** für jeden Algorithmus und Workload.
+### Beachten Sie, dass zwei unterschiedliche Methoden zum testen der Algorithmen zur Verfügung stehen:
+
+- `testScheduler` für FCFS, SJF und RR
+- `testSRTScheduler` für SRT
+
+Der Unterschied besteht darin, wie die Zeit simuliert wird. Denken Sie darüber nach!
+
+
+3. **Vergleiche die Metriken** für jeden Algorithmus und Workload.
 
 3. **Diskutiere die Ergebnisse**:
-       - Welcher Algorithmus ist **fairer** (geringere Varianz in Waiting Times)?
-       - Welcher Algorithmus hat die **beste Response Time** für interaktive Jobs?
-       - Wie beeinflusst das **Quantum** bei Round-Robin die Performance?
+
+    - Welcher Algorithmus ist **fairer** (geringere Varianz in Waiting Times)?
+    - Welcher Algorithmus hat die **beste Response Time** für interaktive Jobs?
+    - Wie beeinflusst das **Quantum** bei Round-Robin die Performance?
 
 ---
 
@@ -318,15 +406,15 @@ List<ProcessControlBlock> workload3 = List.of(
 ## 📂 Dateien in diesem Verzeichnis
 | Datei | Beschreibung | Status |
 |-------|-------------|--------|
-| `woche02/ProcessState.java` | Erweitert um `READY`. | **Angepasst** |
-| `woche02/ProcessControlBlock.java` | Mit `remainingTime`, `startTime`, `finishTime`. | **Angepasst** |
+| `ProcessState.java` | Erweitern um `READY`. | **Zu implementieren** |
+| `ProcessControlBlock.java` | Zeiten ergänzen. | **Zu implementieren** |
 | `Scheduler.java` | Interface für alle Scheduler. | **Fertig** |
-| `FCFSScheduler.java` | First-Come, First-Served. | **Zu implementieren** |
+| `FCFSScheduler.java` | First-Come, First-Served. | **Fertig** |
 | `SJFScheduler.java` | Shortest Job First. | **Zu implementieren** |
 | `SRTScheduler.java` | Shortest Remaining Time. | **Zu implementieren** |
-| `RoundRobinScheduler.java` | Round-Robin mit Quantum. | **Zu implementieren** |
-| `SchedulerUtils.java` | Berechnet Metriken. | **Zu implementieren** |
-| `Main.java` | Testklasse mit Workloads. | **Fertig** |
+| `RoundRobinScheduler.java` | Round-Robin mit Quantum. | **Fertig** |
+| `SchedulerUtils.java` | Berechnet Metriken. | **Fertig** |
+| `Main.java` | Testklasse mit Workloads. Weitere Workloads, weitere tests | **Zu implementieren** |
 
 ---
 
