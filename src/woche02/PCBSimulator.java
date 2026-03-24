@@ -16,7 +16,7 @@ public class PCBSimulator {
      * @param name Name des Prozesses.
      * @return Die PID des neuen Prozesses.
      */
-    public int createProcess(String name) {
+    public int startProcess(String name) {
         int pid = nextId++;
         ProcessControlBlock pcb = new ProcessControlBlock(pid, name);
         pcb.setState(ProcessState.RUNNING);
@@ -53,7 +53,7 @@ public class PCBSimulator {
     /**
      * Setzt die Priorität eines Prozesses.
      * @param pid Die PID des Prozesses.
-     * @param priority Die neue Priorität (1 = niedrig, 10 = hoch).
+     * @param priority Die neue Priorität (1 = hoch, 10 = niedrig).
      */
     public void setPriority(int pid, int priority) {
         // TODO: Implementiere diese Methode

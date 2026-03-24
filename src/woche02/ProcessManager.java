@@ -39,7 +39,7 @@ public class ProcessManager {
      * @param name Name des Prozesses.
      * @return Die PID des neuen Prozesses.
      */
-    public int createProcess(String name) {
+    public int startProcess(String name) {
         int pid = nextId++;
         Process process = new Process(pid, name);
         process.setState(ProcessState.RUNNING);
