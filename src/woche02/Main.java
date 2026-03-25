@@ -14,8 +14,8 @@ public class Main {
 
     private static void testProcessManager() {
         ProcessManager manager = new ProcessManager();
-        int pid1 = manager.startProcess("Editor");
-        int pid2 = manager.startProcess("Compiler");
+        int pid1 = manager.createProcess("Editor");
+        int pid2 = manager.createProcess("Compiler");
 
         manager.blockProcess(pid1);
         System.out.println("Process " + pid1 + " state: " + manager.getProcessState(pid1));
@@ -26,7 +26,7 @@ public class Main {
 
     private static void testPCBSimulator() {
         PCBSimulator simulator = new PCBSimulator();
-        int pid = simulator.startProcess("Database");
+        int pid = simulator.createProcess("Database");
         simulator.setPriority(pid, 5);
         simulator.blockProcess(pid);
 

@@ -16,7 +16,7 @@ public class PCBSimulator {
      * @param name Name des Prozesses.
      * @return Die PID des neuen Prozesses.
      */
-    public int startProcess(String name) {
+    public int createProcess(String name) {
         int pid = nextId++;
         ProcessControlBlock pcb = new ProcessControlBlock(pid, name);
         pcb.setState(ProcessState.RUNNING);
