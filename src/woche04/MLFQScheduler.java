@@ -2,6 +2,8 @@ package woche04;
 
 import java.util.*;
 
+import woche03.Scheduler;
+
 public class MLFQScheduler implements Scheduler {
     private List<LinkedList<ProcessControlBlock>> queues;
     private List<Integer> quanta;
@@ -110,7 +112,10 @@ public class MLFQScheduler implements Scheduler {
                             queues.get(i).add(selected);  // Bleibt in der niedrigsten Queue
                         }
                     } else {
-                        queues.get(i).add(selected);  // Bleibt in der aktuellen Queue
+                        // Bleibt in der aktuellen Queue
+                        // Nicht fertig, nicht den gesamten Quantum verbraucht
+                        // Vorne in der aktuellen Queue, soll im nächsten Durchlauf (nach 1 Zeiteinheit) wieder ausgeführt werden
+                        queues.get(i).addFirst(selected);
                     }
                     waitingTimes.put(selected, 0);
                 } else {
