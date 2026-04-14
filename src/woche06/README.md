@@ -108,12 +108,6 @@ Implementieren Sie `BoundedBufferMonitor`.
 
 ---
 
-Ja — in **Woche 6 (Synchronisation)** werden mehrere wichtige Java-Klassen aus der Standardbibliothek verwendet. Ein entsprechender Abschnitt im Übungsblatt ist didaktisch sehr sinnvoll, weil Studierende so sehen, **welche Standardwerkzeuge Java bereits für Nebenläufigkeit bietet**.
-
-Unten findest du zwei Abschnitte, die stilistisch gut zu deinen bisherigen README-Strukturen passen.
-
----
-
 # 📚 Verwendete Java-Klassen und ihre Dokumentation
 
 In diesem Projekt werden einige Klassen aus der Java-Standardbibliothek verwendet.

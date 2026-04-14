@@ -16,12 +16,6 @@ public class MainThreadBasicsDemo {
         t1.start();
         t2.start();
 
-        /**
-         * join() bedeutet:
-         * Der Main-Thread wartet, bis der jeweilige Thread beendet ist.
-         *
-         * Ohne join() könnte main vor den Worker-Threads fertig werden.
-         */
         t1.join();
         t2.join();
 

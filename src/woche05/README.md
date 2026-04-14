@@ -23,7 +23,7 @@ In dieser Aufgabe starten Sie zwei Threads, die jeweils einige Nachrichten ausge
 2. Führen Sie `MainThreadBasicsDemo` mehrmals aus.
 3. Beschreiben Sie kurz:
    - Warum unterscheiden sich die Ausgaben von Lauf zu Lauf?
-   - Welche Aufgabe übernimmt `join()`?
+   - Welche Aufgabe übernimmt `join()`? Recherchieren Sie das!
 
 ---
 
