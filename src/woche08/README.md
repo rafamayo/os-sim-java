@@ -27,6 +27,20 @@ woche08/
 
 ## Aufgaben
 
+Jede Aufgabe hat eine eigene Testdatei, die sofort ausgeführt werden kann sobald
+die zugehörigen Methoden implementiert sind. `Main.java` führt am Ende einen
+Gesamtvergleich durch und setzt alle Aufgaben voraus.
+
+| Aufgabe | Implementieren in | Testen mit |
+| --- | --- | --- |
+| 1 | `ContiguousMemoryManager.java` | `MainAufgabe1.java` |
+| 2 | `ContiguousMemoryManager.java` | `MainAufgabe2.java` |
+| 3 | `ContiguousMemoryManager.java` | `MainAufgabe3.java` |
+| 4 | `BuddyAllocator.java` | `MainAufgabe4.java` |
+| Gesamt | — | `Main.java` |
+
+---
+
 ### Aufgabe 1 — Platzierungsstrategien (`ContiguousMemoryManager.java`)
 
 Implementieren Sie die drei privaten Methoden:
@@ -109,7 +123,19 @@ Auslastung = belegter Speicher / totalSize
 # Alle Dateien im gleichen Verzeichnis kompilieren
 javac woche08/*.java
 
-# Ausführen
+# Nach Aufgabe 1:
+java woche08.MainAufgabe1
+
+# Nach Aufgabe 2:
+java woche08.MainAufgabe2
+
+# Nach Aufgabe 3:
+java woche08.MainAufgabe3
+
+# Nach Aufgabe 4:
+java woche08.MainAufgabe4
+
+# Gesamtvergleich (alle Aufgaben vollständig):
 java woche08.Main
 ```
 
@@ -163,7 +189,11 @@ der Regel geringere externe Fragmentierung als Worst-Fit aufweisen.
 | `MemoryBlock.java` | Repräsentiert einen zusammenhängenden Speicherblock (frei oder belegt) mit Start, Größe und Besitzer-PID. |
 | `ContiguousMemoryManager.java` | Gerüst **(Aufgaben 1–3)**: verwaltet eine geordnete Freiliste und implementiert die drei Platzierungsstrategien, Coalescing und Fragmentierungsmetriken. |
 | `BuddyAllocator.java` | Gerüst **(Aufgabe 4)**: Buddy-Allocator mit Freilisten pro Ordnung, Splitting und Coalescing. |
-| `Main.java` | Vollständige Testszenarien: drei Strategievergleiche, Buddy-Demo und Fragmentierungsvergleich. |
+| `MainAufgabe1.java` | Testet ausschließlich die Platzierungsstrategien (Aufgabe 1). |
+| `MainAufgabe2.java` | Testet Freigabe und Coalescing sowie den ersten Strategievergleich (Aufgabe 2). |
+| `MainAufgabe3.java` | Testet die Fragmentierungsmetriken schrittweise und im Strategievergleich (Aufgabe 3). |
+| `MainAufgabe4.java` | Testet den Buddy-Allocator isoliert: Splitting, Coalescing, interne Fragmentierung (Aufgabe 4). |
+| `Main.java` | Gesamttest **(nach Abschluss aller Aufgaben)**: drei Strategievergleiche, Buddy-Demo und Fragmentierungsvergleich. |
 
 ---
 

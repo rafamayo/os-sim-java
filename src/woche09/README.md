@@ -45,6 +45,18 @@ pcb.virtualAddressSpaceSize()            // Größe des virtuellen Adressraums
 
 ## Aufgaben
 
+Jede Aufgabe hat eine eigene Testdatei, die sofort ausgeführt werden kann sobald
+die zugehörigen Methoden implementiert sind. `Main.java` führt am Ende alle
+fünf Szenarien durch und setzt beide Aufgaben voraus.
+
+| Aufgabe | Implementieren in | Testen mit |
+| --- | --- | --- |
+| 1 | `MemoryManagementUnit.java` | `MainAufgabe1.java` |
+| 2 | `MemoryManagementUnit.java` | `MainAufgabe2.java` |
+| Gesamt | — | `Main.java` |
+
+---
+
 ### Aufgabe 1 — Adressübersetzung (`MemoryManagementUnit.java`)
 
 Implementieren Sie `translate(ProcessControlBlock pcb, int va, boolean write)`.
@@ -136,7 +148,16 @@ translateWithFaultHandling(pcb, va=80, write=false)
 ## Kompilieren und Ausführen
 
 ```bash
+# Alle Dateien im gleichen Verzeichnis kompilieren
 javac woche09/*.java
+
+# Nach Aufgabe 1:
+java woche09.MainAufgabe1
+
+# Nach Aufgabe 2:
+java woche09.MainAufgabe2
+
+# Gesamttest (beide Aufgaben vollständig):
 java woche09.Main
 ```
 
@@ -198,7 +219,9 @@ werden für den **Clock-Algorithmus** in Woche 11 verwendet.
 | `PhysicalMemory.java` | Physischer Speicher als Frame-Array. Verwaltet freie Frames und bietet `allocateFrame()`, `freeFrame()` und `physicalAddress()`. |
 | `PageFaultException.java` | Wird von `translate()` geworfen, wenn ein PTE ungültig ist. Enthält PID, VPN und virtuelle Adresse. |
 | `MemoryManagementUnit.java` | Gerüst **(Aufgaben 1–2)**: implementiert Adressübersetzung (`translate()`) und Page Fault Handling (`handlePageFault()`). Enthält fertige Hilfsmethode `translateWithFaultHandling()`. |
-| `Main.java` | Fünf vollständige Testszenarien: einfache Übersetzung, Demand Paging, Prozessisolation, Schutzverletzung, Out-of-Memory. |
+| `MainAufgabe1.java` | Testet `translate()` mit bereits gesetzten PTEs: grundlegende Übersetzung, Randbedingungen, Schutzverletzung (Aufgabe 1). |
+| `MainAufgabe2.java` | Testet `handlePageFault()`: Demand Paging, dirty/referenced-Bits, Prozess-Isolation, Out-of-Memory (Aufgabe 2). |
+| `Main.java` | Gesamttest **(nach Abschluss aller Aufgaben)**: fünf vollständige Szenarien. |
 
 ---
 
