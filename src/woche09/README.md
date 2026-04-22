@@ -17,6 +17,30 @@ Ab dieser Woche trennen wir **virtuelle Adressen** (Sicht des Prozesses) von
 **physischen Adressen** (realer RAM). Prozesse sehen einen zusammenhängenden
 virtuellen Adressraum, der intern auf beliebige physische Frames verteilt ist.
 
+### Verbindung zu den Allokationsstrategien aus Woche 08
+
+In Woche 08 haben Sie drei Platzierungsstrategien kennengelernt:
+**First-Fit**, **Best-Fit** und **Worst-Fit**. Sie unterscheiden sich darin,
+*welcher* freie Block gewählt wird — und diese Wahl hat messbare Auswirkungen
+auf die externe Fragmentierung.
+
+In Woche 09 taucht dieselbe Frage wieder auf: Wenn ein Page Fault auftritt,
+muss `PhysicalMemory.allocateFrame()` entscheiden, *welcher* freie Frame
+zugewiesen wird. Der aktuelle Code verwendet schlicht den **ersten freien Frame**
+(First-Fit über das `frameOwner[]`-Array).
+
+**Warum sind Best-Fit und Worst-Fit hier bedeutungslos?**
+Alle Frames sind gleich groß (`pageSize` Bytes). Es gibt keine kleinen oder
+großen Frames — und damit auch keine externe Fragmentierung. Jeder freie Frame
+ist gleichwertig. Die Strategien aus Woche 08 lösen ein Problem (ungleich
+große Lücken), das hier strukturell nicht existiert.
+
+> **Denkanstoß:** Welche neue Art von „Strategie" wird ab Woche 11 relevant,
+> wenn kein Frame mehr frei ist? Dann entscheidet nicht mehr, *welchen freien*
+> Frame wir nehmen, sondern *welchen belegten* Frame wir verdrängen.
+> Die `dirty`- und `referenced`-Bits, die Sie hier bereits setzen, sind genau
+> die Informationen, die diese Entscheidung in Woche 11 steuern.
+
 ---
 
 ## Struktur
@@ -189,7 +213,7 @@ java woche09.Main
 
 ---
 
-## Diskussion
+## Denkanstöße
 
 - Warum zeigen zwei Prozesse mit VA=0 auf unterschiedliche physische Adressen?
 - Was passiert mit `dirty` und `referenced`, wenn eine Seite nur gelesen wird?

@@ -48,6 +48,8 @@ Implementieren Sie die drei privaten Methoden:
 **`firstFit(int size)`**  
 Gibt den ersten freien Block zurück, der mindestens `size` Bytes groß ist.
 
++ 💡 **Bereits im Code implementiert als Vorbild!**
+
 **`bestFit(int size)`**  
 Gibt den kleinsten freien Block zurück, der mindestens `size` Bytes groß ist.
 
