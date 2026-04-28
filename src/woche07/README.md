@@ -30,13 +30,15 @@
 ```
             P0
            /  \
-         G4    G0
+         G0    G1
          /      \
        P4        P1
        |          |
-       G3        G1
-         \      /
-          P3--G2--P2
+       G4        G2
+         \       /
+          P3    P2
+            \  /
+             G3
 
   Pi hält G(i) links, G((i+1)%5) rechts
 ```
