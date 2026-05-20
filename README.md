@@ -20,7 +20,8 @@ Ein einfacher Betriebssystem-Simulator in Java
 | 12    | Dateisystemgrundlagen: Datei-Abstraktion, Metadaten (Inode)    | Einfacher FileSystem-Simulator: Erstellen/Löschen, Inode-Struktur         |
 | 13    | Dateisystem-Verzeichnisstrukturen, Journaling                 | Erweiterung: Verzeichnisse, Pfadauflösung, (optionales) Journaling       |
 | 14    | Prozesskommunikation: Pipes, Message Queues, Shared Memory     | IPC-Simulator: Nachrichtenversand, Ringpuffer, SharedBuffer              |
-| 15    | Kurszusammenfassung und Ausblick                              | Abschluss-Präsentationen: Demo der Simulator-Module, Lessons Learned     |
+| 15    | Prozesskommunikation: Pipes, Message Queues, Shared Memory     | IPC-Simulator: Nachrichtenversand, Ringpuffer, SharedBuffer              |
+| 15    | Kurszusammenfassung und Ausblick                              | Linux-Befehle     |
 
 ### Projekt-Meilensteine können sein:
 
@@ -28,4 +29,4 @@ Ein einfacher Betriebssystem-Simulator in Java
 + Woche 7: Deadlock-Management
 + Woche 11: Vollständiger VM-Simulator
 + Woche 13: Einfaches Dateisystem
-+ Woche 15: Integration aller Module
++ Woche 16: Integration aller Module
