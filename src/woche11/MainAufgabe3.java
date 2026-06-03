@@ -23,7 +23,7 @@ public class MainAufgabe3 {
     static void testClockBasic() {
         System.out.println("-- Clock Schritt fuer Schritt (3 Frames) --\n");
 
-        List<Integer> ref = Arrays.asList(1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5);
+        List<Integer> ref = Arrays.asList(1, 2, 3, 4, 1, 1, 5, 1, 2, 3, 4, 5);
         ClockReplacer clock = new ClockReplacer(3);
 
         System.out.println("Referenzfolge: " + ref);
@@ -34,7 +34,7 @@ public class MainAufgabe3 {
     static void testClockVsLRU() {
         System.out.println("-- Clock vs. LRU vs. FIFO --\n");
 
-        List<Integer> ref = Arrays.asList(1, 2, 3, 1, 4, 2, 5, 2, 1, 3, 4, 5);
+        List<Integer> ref = Arrays.asList(1, 2, 3, 1, 4, 1, 5, 2, 1, 3, 4, 5);
         System.out.println("Referenzfolge: " + ref + "  (Frames: 3)\n");
 
         for (PageReplacer r : new PageReplacer[]{
