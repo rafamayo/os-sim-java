@@ -44,7 +44,7 @@ public class DirectoryFileSystem extends SimpleFileSystem {
     /**
      * Löst einen absoluten Pfad auf und gibt die Inode-Nummer zurück.
      *
-     * TODO (Aufgabe 3):
+     * TODO (Aufgabe 2):
      *   Sonderfall: path.equals("/") → return ROOT_INODE
      *
      *   Allgemein:
@@ -67,7 +67,7 @@ public class DirectoryFileSystem extends SimpleFileSystem {
     /**
      * Erstellt ein neues Verzeichnis.
      *
-     * TODO (Aufgabe 2):
+     * TODO (Aufgabe 3):
      *   1. parentPath = getParentPath(path),  dirName = getBaseName(path)
      *   2. parentIno = resolve(parentPath)
      *   3. parentDir = getDirectory(parentIno)
