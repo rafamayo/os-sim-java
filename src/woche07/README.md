@@ -22,7 +22,7 @@
    ```bash
    # vom Verzeichnis os-sim/src aus:
    javac woche07/*.java
-   java woche07.Main partA_deadlock
+   java woche07.MainDeadlock
    ```
 
 4. **Mache dich mit der Tischanordnung vertraut:**
@@ -44,6 +44,44 @@
 ```
 
 Jeder Philosoph Pi benötigt zum Essen genau **zwei Gabeln**: G(i) links und G((i+1)%5) rechts. Gabeln sind geteilte Ressourcen – sie können nur von **einem** Philosophen gleichzeitig gehalten werden.
+
+---
+
+## Struktur
+
+```
+woche07/
+├── ProcessState.java        # Prozesszustände (inkl. BLOCKED)
+├── SimConfig.java           # Simulationsparameter
+├── Fork.java                 # Gabel als ReentrantLock
+├── DeadlockPhilosopher.java  # ← HIER arbeiten Sie (Aufgabe 1)
+├── SafePhilosopher.java      # ← HIER arbeiten Sie (Aufgabe 2)
+├── DeadlockWatchdog.java     # ← HIER arbeiten Sie (Aufgabe 3)
+├── WaitForGraph.java         # Wait-for Graph mit DFS (fertig, Bonus 4)
+├── ResourceManager.java      # Ressourcenmanager mit WFG (fertig, Bonus 5)
+├── MainDeadlock.java         # Testet Aufgabe 1 + 3 (Teil A, Szenario 1)
+├── MainSafe.java             # Testet Aufgabe 2 (Teil A, Szenario 2)
+├── MainWaitForGraph.java     # Testet Bonus 4–6 (Teil B) ← HIER arbeiten Sie (Aufgabe 6)
+└── MainAufgabe6_LOESUNG_ERST_NACH_DISKUSSION.java
+                              # ⚠️ Lösung zu Aufgabe 6 – erst nach der Diskussion öffnen!
+```
+
+Jede Aufgabengruppe hat eine eigene Main-Datei, die sofort ausgeführt werden
+kann, sobald die zugehörigen Methoden implementiert sind:
+
+| Aufgabe | Implementieren in | Testen mit |
+| --- | --- | --- |
+| 1 | `DeadlockPhilosopher.java` | `MainDeadlock.java` |
+| 2 | `SafePhilosopher.java` | `MainSafe.java` |
+| 3 | `DeadlockWatchdog.java` | `MainDeadlock.java` (Watchdog läuft im Deadlock-Szenario mit) |
+| 4 *(Bonus)* | – (fertig) | `MainWaitForGraph.java` |
+| 5 *(Bonus)* | – (fertig) | `MainWaitForGraph.java` |
+| 6 *(Bonus)* | `MainWaitForGraph.java` | `MainWaitForGraph.java` |
+
+> ⚠️ **`MainAufgabe6_LOESUNG_ERST_NACH_DISKUSSION.java`** löst die
+> Diskussionsfragen von Aufgabe 6 auf (siehe unten). Bitte erst öffnen bzw.
+> ausführen, **nachdem** ihr das Szenario selbst gebaut und die Fragen im
+> Team besprochen habt.
 
 ---
 
@@ -81,7 +119,7 @@ Lege danach die Gabeln wieder ab (rechte zuerst, dann linke).
 
 **Starte die Simulation:**
 ```
-java woche07.Main partA_deadlock
+java woche07.MainDeadlock
 ```
 
 **Beobachtungsfragen:**
@@ -108,13 +146,13 @@ this.secondFork = null; // TODO: ersetzen
 
 **Starte die Simulation:**
 ```
-java woche07.Main partA_safe
+java woche07.MainSafe
 ```
 
 **Beobachtungsfragen:**
 - Terminiert die Simulation diesmal ohne Watchdog-Eingriff?
 - Welche Coffman-Bedingung wird durch Lock Ordering eliminiert?
-- Vergleiche die Gesamtlaufzeit zwischen `partA_deadlock` und `partA_safe`. Was fällt auf?
+- Vergleiche die Gesamtlaufzeit zwischen `MainDeadlock` und `MainSafe`. Was fällt auf?
 - **Grenzfall P4:** Welche Gabeln nimmt P4 in welcher Reihenfolge? Erkläre, warum P4 in der naiven Variante der „kritische" Philosoph ist, der den Zyklus schließt.
 
 ---
@@ -122,6 +160,12 @@ java woche07.Main partA_safe
 ### **Aufgabe 3: Watchdog-Monitor – `DeadlockWatchdog.java`**
 
 **Ziel:** Timeout-basierte Deadlock-Heuristik verstehen und ergänzen.
+
+**💡 Hinweis:** Der Watchdog hat kein eigenes Szenario – er läuft bereits im
+naiven Deadlock-Szenario aus Aufgabe 1 mit. Zum Testen also erneut:
+```
+java woche07.MainDeadlock
+```
 
 **3a)** Zähle die lebenden Philosophen im BLOCKED-Zustand:
 
@@ -165,7 +209,7 @@ long blockedCount = 0; // TODO: ersetzen
 
 Starte Teil B und prüfe alle Szenarien:
 ```
-java woche07.Main partB
+java woche07.MainWaitForGraph
 ```
 
 Erwartete Ausgaben:
@@ -185,7 +229,7 @@ Erwartete Ausgaben:
 - Wann wird eine Wartekante in den WFG eingefügt, wann wieder entfernt?
 - Was passiert, wenn `checkDeadlock()` einen Zyklus findet?
 
-Szenario B5 in `Main.runPartB()` baut folgenden Zyklus auf:
+Szenario B5 in `MainWaitForGraph.main()` baut folgenden Zyklus auf:
 ```
 P0 hält R1, wartet auf R2 (hält P1)  →  WFG: P0 → P1
 P1 hält R2, wartet auf R3 (hält P2)  →  WFG: P1 → P2
@@ -199,11 +243,11 @@ Exception: 🔴 DEADLOCK erkannt! Zyklus: P0 → P1 → P2 → P0
 
 ---
 
-### **Aufgabe 6: Eigenes Experiment – `Main.java`**
+### **Aufgabe 6: Eigenes Experiment – `MainWaitForGraph.java`**
 
 **Ziel:** Grenzen der Zyklusdetektion verstehen.
 
-Ergänze das Szenario am Ende von `runPartB()` (der `TODO`-Kommentar):
+Ergänze das Szenario am Ende von `main()` in `MainWaitForGraph.java` (der `TODO`-Kommentar):
 
 Erstelle einen WFG mit 4 Prozessen (P0–P3):
 - P0→P1, P1→P2, P2→P0 (Zyklus)
@@ -213,6 +257,8 @@ Erstelle einen WFG mit 4 Prozessen (P0–P3):
 - Wird P3 als Teil des Deadlocks gemeldet?
 - Welche Prozesse sind tatsächlich blockiert? Kann P3 jemals fortfahren?
 - Wie würde ein reales OS mit P3 umgehen?
+
+**Erst wenn ihr diese Fragen im Team besprochen habt:** `MainAufgabe6_LOESUNG_ERST_NACH_DISKUSSION.java` enthält die Auflösung inkl. einer Erklärung, warum `detectDeadlock()` je nach Traversierungsreihenfolge unterschiedliche Ergebnisse liefern kann.
 
 ---
 
@@ -245,7 +291,10 @@ Erstelle einen WFG mit 4 Prozessen (P0–P3):
 | `DeadlockWatchdog.java` | Timeout-basierter Deadlock-Monitor. | **Aufgabe 3** |
 | `WaitForGraph.java` | Wait-for Graph mit DFS. | **Fertig** *(Bonus: Aufgabe 4)* |
 | `ResourceManager.java` | Ressourcenmanager mit WFG. | **Fertig** *(Bonus: Aufgabe 5)* |
-| `Main.java` | Testszenarien Teil A + B. | **Bonus: Aufgabe 6* |
+| `MainDeadlock.java` | Testszenario Teil A, Szenario 1 (Aufgabe 1 + 3). | **Fertig** |
+| `MainSafe.java` | Testszenario Teil A, Szenario 2 (Aufgabe 2). | **Fertig** |
+| `MainWaitForGraph.java` | Testszenarien Teil B, B1–B5. | **Bonus: Aufgabe 6** |
+| `MainAufgabe6_LOESUNG_ERST_NACH_DISKUSSION.java` | ⚠️ Lösung zu Aufgabe 6 – erst nach Diskussion öffnen. | **Fertig** *(Spoiler!)* |
 
 ---
 
