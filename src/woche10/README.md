@@ -36,13 +36,13 @@ Bei einem TLB-Hit entfällt der Page Table Walk vollständig.
 - Bei Miss: `misses++`, `-1` zurückgeben.
 
 **`insert(int pid, int vpn, int frame)`**
-Sucht einen freien (ungültigen) Eintrag. Falls keiner frei: LRU-Eintrag
-(kleinster `lastUsed`-Wert) verdrängen, `evictions++`.
-Eintrag befüllen: `setValid(true)`, `setPid`, `setVpn`, `setFrame`, `setLast(++clock)`.
+- Sucht einen freien (ungültigen) Eintrag.
+- Falls keiner frei: LRU-Eintrag (kleinster `lastUsed`-Wert) verdrängen, `evictions++`.
+- Eintrag befüllen: `setValid(true)`, `setPid`, `setVpn`, `setFrame`, `setLast(++clock)`.
 
 **`flush(int pid)`**
-Invalidiert alle Einträge mit `entry.getPid() == pid`.
-Bei `pid == -1`: vollständiger Flush aller Einträge. `flushes++`.
+- Invalidiert alle Einträge mit `entry.getPid() == pid`.
+- Bei `pid == -1`: vollständiger Flush aller Einträge. `flushes++`.
 
 ---
 
