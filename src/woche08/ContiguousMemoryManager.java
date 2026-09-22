@@ -175,15 +175,13 @@ public class ContiguousMemoryManager {
         //
         // Rechter Nachbar (idx + 1):
         //   Falls vorhanden und frei:
-        //     block.setSize(block.getSize() + right.getSize())
-        //     blocks.remove(right)
-        //     totalCoalesces++
+        //   beide zusammenführen (Größe addieren, rechten Block aus der Liste entfernen).
+        //   totalCoalesces++
         //
         // Linker Nachbar (idx - 1):
         //   Falls vorhanden und frei:
-        //     left.setSize(left.getSize() + block.getSize())
-        //     blocks.remove(block)
-        //     totalCoalesces++
+        //   beide zusammenführen, den aktuellen Block aus der Liste entfernen.
+        //   totalCoalesces++
         //
         // ACHTUNG: Nach dem Zusammenführen mit dem rechten Nachbarn hat sich
         // der Index des linken Nachbarn nicht verändert.
@@ -207,7 +205,7 @@ public class ContiguousMemoryManager {
         // Berechnen Sie totalFree (Summe aller freien Blockgrößen)
         // und largestFree (Maximum aller freien Blockgrößen).
         // Geben Sie 0.0 zurück wenn totalFree == 0.
-        // Sonst: return 1.0 - (double) largestFree / totalFree;
+        // Sonst: geben Sie die "externalFragmentation" zurück -> (1.0 - (double) largestFree / totalFree) 
         throw new UnsupportedOperationException("externalFragmentation() nicht implementiert");
     }
 
