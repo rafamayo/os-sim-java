@@ -142,7 +142,7 @@ public class TaskQueue {
      *
      * Verhalten:
      *
-     *   - Wenn eine Aufgabe vorhanden ist -> zurückgeben
+     *   - Wenn eine Aufgabe vorhanden ist -> die erste Task zurückgeben
      *   - Wenn keine Aufgabe vorhanden ist -> warten
      *   - Wenn shutdown aktiv ist -> null zurückgeben
      *

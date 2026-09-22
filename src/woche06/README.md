@@ -56,7 +56,8 @@ Wir verwenden dazu eine `TaskQueue`:
 **Aufgaben:**
 1. Vervollständigen Sie `TaskQueue.submit()`, `TaskQueue.take()` und `TaskQueue.shutdown()`.
 2. Führen Sie `MainConditionDemo` aus.
-3. Begründen Sie:
+3. Recherchieren Sie das Konzept *spurious wakeup*
+4. Begründen Sie:
    - Warum `while(...) wait()` statt `if(...) wait()`?
    - Warum ist `wait()` effizienter als Busy Waiting?
 

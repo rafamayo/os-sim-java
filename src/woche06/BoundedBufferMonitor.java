@@ -19,6 +19,19 @@ package woche06;
  *     wait()
  *     notifyAll()
  *
+ * WICHTIG zum Verständnis:
+ *
+ *     synchronized  ist ein Java-SCHLÜSSELWORT (Sprachsyntax).
+ *     Der Compiler übersetzt es in spezielle Bytecode-Instruktionen (monitorenter/monitorexit).
+ *
+ *     wait() und notifyAll() sind dagegen ganz normale METHODEN
+ *     der Klasse Object — jedes Java-Objekt besitzt sie automatisch,
+ *     weil alles von Object erbt. Es gibt also keine eigene
+ *     "Monitor"-Klasse: der Monitor steckt implizit in jedem Objekt,
+ *     auf das synchronized angewendet wird — hier: in "this",
+ *     dem BoundedBufferMonitor-Objekt selbst.
+ * 
+ *
  * In dieser Klasse verwalten wir einen begrenzten Puffer (bounded buffer),
  * der von mehreren Producer- und Consumer-Threads gemeinsam benutzt wird.
  *
@@ -71,10 +84,8 @@ public class BoundedBufferMonitor {
     public synchronized String putWithSnapshot(int item) throws InterruptedException {
 
         // TODO:
-        // 1. Warten, solange der Buffer voll ist
-        //    while (rb.size() == rb.capacity()) { wait(); }
-        // 2. Item einfügen
-        //    rb.put(item);
+        // 1. Warten, solange der Buffer voll ist -> Methode wait() verwenden
+        // 2. Item in rb einfügen
         // 3. Snapshot erzeugen
         //    String snap = rb.snapshot();
         // 4. notifyAll() aufrufen
@@ -119,8 +130,6 @@ public class BoundedBufferMonitor {
          * Diese Consumer sollen jetzt wieder prüfen dürfen,
          * ob ihre Bedingung erfüllt ist.
          */
-        // ---> CODE
-
         notifyAll();
 
         // Zurückgeben (Logging)
@@ -136,13 +145,11 @@ public class BoundedBufferMonitor {
     public synchronized GetResult getWithSnapshot() throws InterruptedException {
 
         // TODO:
-        // 1. Warten, solange der Buffer leer ist
-        //    while (rb.size() == 0) { wait(); }
-        // 2. Wert entnehmen
-        //    int v = rb.get();
+        // 1. Warten, solange der Buffer leer ist -> Methode wait() verwenden
+        // 2. Wert von rb entnehmen -> in v
         // 3. Snapshot erzeugen
         //    String snap = rb.snapshot();
-        // 4. notifyAll() aufrufen
+        // 4. Alle wartenden Prozesse wecken -> welche Methode ist das?
         // 5. return new GetResult(v, snap);
 
         /**

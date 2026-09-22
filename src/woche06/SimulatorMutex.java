@@ -21,10 +21,10 @@ public class SimulatorMutex {
     public synchronized void acquire(ProcessControlBlock p) {
         // TODO:
         // Falls owner == null:
-        //   owner = p
+        //   setzen Sie den owner zum aktuellen Prozess (ProcessControlBlock)
         // Sonst:
-        //   waiters.addLast(p)
-        //   p.blockOn(this)
+        //   den aktuellen Prozess zu den "waiters" hinzufügen (hinten!)
+        //   und den aktuellen Prozess blockieren (die Klasse ProcessControlBlock nach der geeigneten Methode durchsuchen!)
     }
 
     public synchronized void release(ProcessControlBlock p) {
