@@ -12,7 +12,7 @@ public class TLB {
 
     private final int        capacity;
     private final TLBEntry[] entries;
-    private long             clock;
+    private long             clock;         // Wie aktuell ist ein Eintrag?
 
     // Statistiken
     private int hits;

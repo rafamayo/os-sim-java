@@ -116,7 +116,7 @@ java woche10.Main
 ## Denkanstöße
 
 - Warum ist ein TLB-Miss bei einem 2-Level-Walk teurer als bei einem 1-Level-Walk?
-- Was passiert mit dem TLB bei einem Kontextwechsel ohne ASID-Unterstützung?
+- Was passiert mit dem TLB bei einem Kontextwechsel ohne ASID (Address Space ID)-Unterstützung?
 - Ab welcher TLB-Größe ist weiteres Vergrößern kaum noch gewinnbringend?
 - Warum hilft räumliche Lokalität dem TLB besonders?
 
