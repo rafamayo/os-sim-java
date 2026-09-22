@@ -13,8 +13,8 @@ Nach dieser Übung können Sie:
 
 In Woche 09 wurde jede Adressübersetzung direkt in der Seitentabelle nachgeschlagen.
 Das bedeutet bei einem 2-Level-Walk bis zu 3 Speicherzugriffe pro VA.
-Der TLB cached häufig genutzte Übersetzungen im schnellen Hardware-Speicher.
-Bei einem Hit entfällt der Page Table Walk vollständig.
+Der TLB schreibt häufig genutzte Übersetzungen auf einen Cache im schnellen Hardware-Speicher.
+Bei einem TLB-Hit entfällt der Page Table Walk vollständig.
 
 ---
 
@@ -31,9 +31,9 @@ Bei einem Hit entfällt der Page Table Walk vollständig.
 ### Aufgabe 1 — TLB: lookup(), insert(), flush() (`TLB.java`)
 
 **`lookup(int pid, int vpn)`**
-Durchsucht alle Einträge. Treffer wenn `entry.isValid() && entry.getPid()==pid && entry.getVpn()==vpn`.
-Bei Treffer: `entry.setLast(++clock)`, `hits++`, Frame zurückgeben.
-Bei Miss: `misses++`, `-1` zurückgeben.
+- Durchsucht alle Einträge. Treffer wenn `entry.isValid() && entry.getPid()==pid && entry.getVpn()==vpn`.
+- Bei Treffer: `entry.setLast(++clock)`, `hits++`, Frame zurückgeben.
+- Bei Miss: `misses++`, `-1` zurückgeben.
 
 **`insert(int pid, int vpn, int frame)`**
 Sucht einen freien (ungültigen) Eintrag. Falls keiner frei: LRU-Eintrag
