@@ -141,7 +141,7 @@ Beantworten Sie kurz:
 
 Nicht nur Zahlen können durch Nebenläufigkeit problematisch werden.
 
-Auch **Zustandsinformationen** oder **Systemdatenstrukturen** sind gemeinsame Ressourcen.
+Auch **Zustandsinformationen**, **Systemdatenstrukturen** oder **Dateien** sind gemeinsame Ressourcen.
 
 Ohne geeignete Synchronisation können mehrere Threads gleichzeitig Änderungen durchführen und damit **inkonsistente Systemzustände** erzeugen.
 
