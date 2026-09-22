@@ -12,6 +12,7 @@ package woche09;
  */
 public class MemoryManagementUnit {
 
+    // Modelliert den physischen Hauptspeicher -> Klasse PhysicalMemory.java
     private final PhysicalMemory physMem;
 
     // Statistiken
